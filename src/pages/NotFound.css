@@ -1,0 +1,50 @@
+.not-found {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 200px);
+  padding: 2rem 0;
+  text-align: center;
+}
+
+.not-found-content {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.not-found h1 {
+  font-size: 6rem;
+  color: var(--primary-color);
+  margin-bottom: 0;
+  line-height: 1.2;
+}
+
+.not-found h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.not-found p {
+  color: var(--text-light);
+  margin-bottom: 2rem;
+}
+
+.teddy-icon {
+  font-size: 5rem;
+  margin-bottom: 2rem;
+}
+
+.home-btn {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: var(--primary-color);
+  color: white;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.3s;
+}
+
+.home-btn:hover {
+  background-color: var(--primary-dark);
+}
