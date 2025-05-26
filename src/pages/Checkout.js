@@ -43,22 +43,32 @@ const Checkout = () => {
     try {
       setLoading(true);
       
+      // Create a well-structured order object with all required fields
       const orderData = {
         userId: currentUser.uid,
         userEmail: currentUser.email,
-        shippingInfo: { ...formData },
-        items: cart.map(item => ({
-          productId: item.id,
+        orderItems: cart.map(item => ({
+          id: item.id,
           name: item.name,
           price: item.price,
           quantity: item.quantity,
-          imageUrl: item.imageUrl
+          image: item.imageUrl
         })),
-        totalAmount: totalPrice,
+        shippingInfo: {
+          fullName: formData.fullName || 'Not provided',
+          address: formData.address || 'Not provided',
+          city: formData.city || 'Not provided',
+          postalCode: formData.zipCode || 'Not provided',
+          country: formData.state || 'Not provided',
+          phone: formData.phoneNumber || 'Not provided'
+        },
         status: 'pending',
-        createdAt: serverTimestamp()
+        total: totalPrice,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
       };
       
+      // Add order to Firestore
       const orderRef = await addDoc(collection(db, 'orders'), orderData);
       
       toast.success('Order placed successfully!');
