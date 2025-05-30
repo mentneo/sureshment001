@@ -1,7 +1,7 @@
-// Cloudinary configuration
-const CLOUDINARY_CLOUD_NAME = 'davjxvz8w';
-const UPLOAD_PRESET = 'ml_default';
-const CLOUDINARY_API_KEY = '8pv6a1DTovBA8_j10TKofEHBEYs';
+// Cloudinary configuration with the correct credentials
+const CLOUDINARY_CLOUD_NAME = 'dp8bfdbab';
+const UPLOAD_PRESET = 'cryptchat';
+const CLOUDINARY_API_KEY = '337739287121541';
 const CLOUDINARY_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
 
 // Default fallback image (base64 encoded small teddy bear image for immediate display)
@@ -27,18 +27,13 @@ export const uploadImageToCloudinary = async (imageFile) => {
     const formData = new FormData();
     formData.append('file', imageFile);
     formData.append('upload_preset', UPLOAD_PRESET);
-    // Using timestamp as a unique identifier
-    formData.append('timestamp', timestamp);
+    formData.append('api_key', CLOUDINARY_API_KEY); // Use the updated API key
+    formData.append('folder', folderPath);
     
-    // Generate signature if needed for your account (unsigned uploads may also be possible)
-    // const signature = generateSignature({
-    //   timestamp,
-    //   folder: folderPath
-    // });
-    // formData.append('signature', signature);
-    // formData.append('api_key', CLOUDINARY_API_KEY);
+    console.log("Starting Cloudinary upload with cloud name:", CLOUDINARY_CLOUD_NAME);
+    console.log("Using upload preset:", UPLOAD_PRESET);
     
-    // Using unsigned upload
+    // Using upload with explicit API key
     const response = await fetch(CLOUDINARY_URL, {
       method: 'POST',
       body: formData,
