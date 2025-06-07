@@ -24,8 +24,8 @@ const Footer = () => {
           
           <div className="footer-section">
             <h3>Contact</h3>
-            <p>Email: info@teddybearshop.com</p>
-            <p>Phone: (123) 456-7890</p>
+            <p>Email: suresh@gmail.com</p>
+            <p>Phone: (91) 8143910086</p>
           </div>
         </div>
         
