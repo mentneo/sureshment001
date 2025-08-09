@@ -14,6 +14,8 @@ import AdminProducts from './pages/admin/Products';
 import AdminOrders from './pages/admin/Orders';
 import AdminAddProduct from './pages/admin/AddProduct';
 import AdminEditProduct from './pages/admin/EditProduct';
+import AdminVideos from './pages/admin/Videos';
+import Videos from './pages/Videos';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import AdminRoute from './components/auth/AdminRoute';
 import NotFound from './pages/NotFound';
@@ -30,6 +32,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/videos" element={<Videos />} />
           
           {/* Protected User Routes */}
           <Route path="/checkout" element={
@@ -67,6 +70,11 @@ function App() {
           <Route path="/admin/orders" element={
             <AdminRoute>
               <AdminOrders />
+            </AdminRoute>
+          } />
+          <Route path="/admin/videos" element={
+            <AdminRoute>
+              <AdminVideos />
             </AdminRoute>
           } />
           

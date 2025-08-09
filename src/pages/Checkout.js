@@ -73,7 +73,15 @@ const Checkout = () => {
       
       toast.success('Order placed successfully!');
       clearCart();
-      navigate('/orders', { state: { newOrderId: orderRef.id } });
+      
+      // Use replace instead of push to prevent going back to checkout page
+      navigate('/orders', { 
+        state: { 
+          newOrderId: orderRef.id,
+          fromCheckout: true 
+        },
+        replace: true
+      });
       
     } catch (error) {
       console.error('Error placing order:', error);

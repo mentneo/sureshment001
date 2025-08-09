@@ -2,13 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { useAuth } from '../contexts/AuthContext';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import './UserOrders.css';
+import './UserOrders-media.css';
 
 const UserOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const { currentUser } = useAuth();
+  const location = useLocation();
   
   useEffect(() => {
     const fetchOrders = async () => {
@@ -18,6 +20,7 @@ const UserOrders = () => {
       }
       
       try {
+        console.log("Fetching orders for user:", currentUser.uid);
         const ordersRef = collection(db, 'orders');
         const q = query(
           ordersRef,
@@ -26,19 +29,44 @@ const UserOrders = () => {
         );
         
         const querySnapshot = await getDocs(q);
+        console.log("Query snapshot size:", querySnapshot.size);
+        
+        if (querySnapshot.empty) {
+          console.log("No orders found for this user");
+          setOrders([]);
+          setLoading(false);
+          return;
+        }
+        
         const userOrders = querySnapshot.docs.map(doc => {
           const data = doc.data();
+          console.log("Order data:", data);
+          
+          // Handle timestamps appropriately - they might be Firebase Timestamps
+          let orderDate = 'Unknown date';
+          if (data.createdAt) {
+            // Check if it's a Firebase Timestamp or a regular Date
+            if (data.createdAt.toDate) {
+              orderDate = data.createdAt.toDate().toLocaleDateString();
+            } else if (data.createdAt instanceof Date) {
+              orderDate = data.createdAt.toLocaleDateString();
+            } else if (typeof data.createdAt === 'string') {
+              orderDate = new Date(data.createdAt).toLocaleDateString();
+            }
+          }
+          
           return {
             id: doc.id,
             ...data,
             // Ensure these properties exist
             orderItems: data.orderItems || [],
             shippingInfo: data.shippingInfo || {},
-            orderDate: data.createdAt ? new Date(data.createdAt.toDate()).toLocaleDateString() : 'Unknown date',
+            orderDate: orderDate,
             status: data.status || 'pending'
           };
         });
         
+        console.log('Processed orders:', userOrders);
         setOrders(userOrders);
       } catch (error) {
         console.error("Error fetching orders:", error);
@@ -48,7 +76,15 @@ const UserOrders = () => {
     };
     
     fetchOrders();
-  }, [currentUser]);
+  }, [currentUser, location.state?.fromCheckout]);  // Re-fetch if coming from checkout
+  
+  // If coming from checkout, highlight the new order
+  useEffect(() => {
+    if (location.state?.newOrderId && location.state?.fromCheckout) {
+      // Could add additional UI feedback here
+      // For example, scroll to the new order or highlight it
+    }
+  }, [location.state]);
   
   // Helper function to calculate order total
   const calculateOrderTotal = (order) => {
@@ -120,9 +156,10 @@ const UserOrders = () => {
                             </div>
                             <div className="item-details">
                               <h4>{item.name || 'Unknown Product'}</h4>
-                              <p>
-                                ${(item.price || 0).toFixed(2)} x {item.quantity || 0} = 
-                                ${((item.price || 0) * (item.quantity || 0)).toFixed(2)}
+                              <p><strong>Quantity:</strong> {item.quantity || 0}</p>
+                              <p><strong>Price:</strong> ${(item.price || 0).toFixed(2)}</p>
+                              <p className="item-price">
+                                <strong>Total:</strong> ${((item.price || 0) * (item.quantity || 0)).toFixed(2)}
                               </p>
                             </div>
                           </div>

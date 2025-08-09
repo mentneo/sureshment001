@@ -42,6 +42,9 @@ const Header = () => {
             <li>
               <Link to="/" onClick={() => setIsMenuOpen(false)}>Home</Link>
             </li>
+            <li>
+              <Link to="/videos" onClick={() => setIsMenuOpen(false)}>Videos</Link>
+            </li>
             
             {isAdmin() && (
               <li className="admin-menu">
@@ -50,6 +53,7 @@ const Header = () => {
                   <Link to="/admin/products" onClick={() => setIsMenuOpen(false)}>Products</Link>
                   <Link to="/admin/add-product" onClick={() => setIsMenuOpen(false)}>Add Product</Link>
                   <Link to="/admin/orders" onClick={() => setIsMenuOpen(false)}>Orders</Link>
+                  <Link to="/admin/videos" onClick={() => setIsMenuOpen(false)}>Videos</Link>
                 </div>
               </li>
             )}
